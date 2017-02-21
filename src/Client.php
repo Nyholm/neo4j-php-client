@@ -54,7 +54,7 @@ class Client implements ClientInterface
      *
      * @throws \GraphAware\Neo4j\Client\Exception\Neo4jExceptionInterface
      *
-     * @return \GraphAware\Common\Result\Result
+     * @return \GraphAware\Common\Result\Result|null
      */
     public function run($query, $parameters = null, $tag = null, $connectionAlias = null)
     {
@@ -87,7 +87,7 @@ class Client implements ClientInterface
      *
      * @throws Neo4jException
      *
-     * @return AbstractRecordCursor
+     * @return \GraphAware\Common\Result\Result
      */
     public function runWrite($query, $parameters = null, $tag = null)
     {
@@ -105,7 +105,7 @@ class Client implements ClientInterface
      *
      * @throws Neo4jException
      *
-     * @return AbstractRecordCursor
+     * @return \GraphAware\Common\Result\Result
      */
     public function sendWriteQuery($query, $parameters = null, $tag = null)
     {
