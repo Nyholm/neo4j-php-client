@@ -17,8 +17,6 @@ use GraphAware\Common\Driver\SessionInterface;
 use GraphAware\Common\Transaction\TransactionInterface;
 use GraphAware\Neo4j\Client\Exception\Neo4jException;
 use GraphAware\Neo4j\Client\Formatter\ResponseFormatter;
-use GuzzleHttp\Client as GuzzleClient;
-use Http\Adapter\Guzzle6\Client;
 use Http\Client\Common\Plugin\ErrorPlugin;
 use Http\Client\Common\PluginClient;
 use Http\Client\Exception\HttpException;
@@ -60,18 +58,11 @@ class Session implements SessionInterface
 
     /**
      * @param string                  $uri
-     * @param GuzzleClient|HttpClient $httpClient
+     * @param HttpClient $httpClient
      * @param ConfigInterface         $config
      */
-    public function __construct($uri, $httpClient, ConfigInterface $config)
+    public function __construct($uri, HttpClient $httpClient, ConfigInterface $config)
     {
-        if ($httpClient instanceof GuzzleClient) {
-            @trigger_error('Passing a Guzzle client to Session is deprecrated. Will be removed in 5.0. Use a HTTPlug client');
-            $httpClient = new Client($httpClient);
-        } elseif (!$httpClient instanceof HttpClient) {
-            throw new \RuntimeException('Second argument to Session::__construct must be an instance of Http\Client\HttpClient.');
-        }
-
         if (null !== $config && !$config instanceof BaseConfiguration) {
             throw new \RuntimeException(sprintf('Third argument to "%s" must be null or "%s"', __CLASS__, BaseConfiguration::class));
         }

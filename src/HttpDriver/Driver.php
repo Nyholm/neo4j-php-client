@@ -14,7 +14,7 @@ namespace GraphAware\Neo4j\Client\HttpDriver;
 use GraphAware\Common\Connection\BaseConfiguration;
 use GraphAware\Common\Driver\ConfigInterface;
 use GraphAware\Common\Driver\DriverInterface;
-use Http\Adapter\Guzzle6\Client;
+use Http\Discovery\HttpClientDiscovery;
 
 class Driver implements DriverInterface
 {
@@ -49,7 +49,7 @@ class Driver implements DriverInterface
      */
     public function session()
     {
-        return new Session($this->uri, $this->getHttpClient(), $this->config);
+        return new Session($this->uri, HttpClientDiscovery::find(), $this->config);
     }
 
     /**
@@ -58,32 +58,5 @@ class Driver implements DriverInterface
     public function getUri()
     {
         return $this->uri;
-    }
-
-    /**
-     *
-     * @return \Http\Client\HttpClient
-     */
-    private function getHttpClient()
-    {
-        $options = [];
-        if ($this->config->hasValue('timeout')) {
-            $options['timeout'] = $this->config->getValue('timeout');
-        }
-
-        if ($this->config->hasValue('curl_interface')) {
-            $options['curl'][10062] = $this->config->getValue('curl_interface');
-        }
-
-        if (empty($options)) {
-            return $this->config->getValue('http_client');
-        }
-
-        // This is to keep BC. Will be removed in 5.0
-
-        $options['curl'][74] = true;
-        $options['curl'][75] = true;
-
-        return Client::createWithConfig($options);
     }
 }
