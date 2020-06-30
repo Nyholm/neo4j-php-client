@@ -142,6 +142,8 @@ class Session implements SessionInterface
     public function flush(Pipeline $pipeline)
     {
         $request = $this->prepareRequest($pipeline);
+        $uri = $request->getUri()->__toString();
+        $body = $request->getBody()->__toString();
         try {
             $response = $this->httpClient->sendRequest($request);
             $data = json_decode((string) $response->getBody(), true);
