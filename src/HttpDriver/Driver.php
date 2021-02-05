@@ -49,7 +49,19 @@ class Driver implements DriverInterface
      */
     public function session()
     {
-        return new Session($this->uri, HttpClientDiscovery::find(), $this->config);
+        return new Session($this->uri, $this->getHttpClient(), $this->config);
+    }
+
+    /**
+     * @return \Http\Client\HttpClient
+     */
+    private function getHttpClient()
+    {
+        if ($this->config->hasValue('http_client')) {
+            return $this->config->getValue('http_client');
+        }
+
+        return HttpClientDiscovery::find();
     }
 
     /**
